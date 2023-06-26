@@ -1,7 +1,8 @@
-namespace FunOlympicGameManagementSystem.Models {
-    public class ErrorViewModel {
+namespace FunOlympicGameManagementSystem.Models.ViewModels
+{
+    public class ErrorViewModel
+    {
         public string? RequestId { get; set; }
-
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
     }
 }

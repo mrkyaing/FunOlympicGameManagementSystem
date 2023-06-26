@@ -1,4 +1,4 @@
-﻿using FunOlympicGameManagementSystem.Models;
+﻿using FunOlympicGameManagementSystem.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
