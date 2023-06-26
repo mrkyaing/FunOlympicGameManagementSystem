@@ -25,7 +25,7 @@
                                     <img src="~/assets/images/logos/dark-logo.svg" width="180" alt="">
                                 </a>
                                 <p class="text-center">Please register first!!</p>
-                                <form>
+                                <form action="/account/register" method="post">
                                     <div class="mb-3">
                                         <label for="txtUserName" class="form-label">User Name</label>
                                         <input type="text" name="UserName" class="form-control" id="txtUserName" aria-describedby="textHelp"  required>
@@ -62,7 +62,8 @@
                                         <label for="txtAddress" class="form-label">Address</label>
                                        <textarea name="Address" cols="10" rows="5" class="form-control"></textarea>
                                     </div>
-                                    <a href="/account/register" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Register</a>
+                                    <input type="submit" value="Register" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" />
+                                  
                                     <div class="d-flex align-items-center justify-content-center">
                                         <p class="fs-4 mb-0 fw-bold">Already have an Account?</p>
                                         <a class="text-primary fw-bold ms-2" href="/account/login">Login</a>
