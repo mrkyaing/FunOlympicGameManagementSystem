@@ -25,6 +25,11 @@
                                     <img src="~/assets/images/logos/dark-logo.svg" width="180" alt="">
                                 </a>
                                 <p class="text-center">Please register first!!</p>
+                                @if (ViewBag.Msg != null) {
+                                    <div class="alert alert-success">
+                                        @ViewBag.Msg @Html.Raw(ViewBag.ActivateURL)
+                                    </div>
+                                }
                                 <form action="/account/register" method="post">
                                     <div class="mb-3">
                                         <label for="txtUserName" class="form-label">User Name</label>
@@ -32,7 +37,8 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="txtEmail" class="form-label">Email Address</label>
-                                        <input type="email" name="UserEmail" class="form-control" id="txtEmail" aria-describedby="emailHelp" required>
+                                        <input type="email" name="Email" class="form-control" id="txtEmail" aria-describedby="emailHelp" required>
+                                        @Html.ValidationMessage("EmailExists", new { @class = "text-danger" })
                                     </div>
                                     <div class="mb-4">
                                         <label for="txtPasswrod" class="form-label">Password</label>
@@ -44,12 +50,12 @@
                                     </div>
                                       <div class="mb-4">
                                         <label for="txtDOB" class="form-label">DOB</label>
-                                        <input type="date" class="form-control" id="txtDate">
+                                        <input type="date" class="form-control" id="txtDate" name="DOB">
                                     </div>
                                     <div class="mb-4">
                                         <label for="txtConfirmPasswrod" class="form-label">Gender</label>
-                                            <input type="radio" name="Gender" class="form-check" id="rdoGender" checked>Female
-                                            <input type="radio" name="Gender" class="form-check" id="rdoGender">Male
+                                        <input type="radio" name="Gender" class="form-check" value="Female" id="rdoFemale" checked>Female
+                                        <input type="radio" name="Gender" class="form-check" value="Male" id="rdoMale">Male
                                     </div>
                                     <div class="mb-4">
                                         <label for="ddlCountry" class="form-label">Country</label>
@@ -78,5 +84,15 @@
     </div>
     <script src="~/assets/libs/jquery/dist/jquery.min.js"></script>
     <script src="~/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#rdoMale').click(function () {
+                $("#rdoFemale").prop("checked", false);
+            });
+            $('#rdoFemale').click(function () {
+                $("#rdoMale").prop("checked", false);
+            });
+        });
+    </script>
 </body>
 </html>
