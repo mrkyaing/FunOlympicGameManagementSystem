@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using static System.Net.WebRequestMethods;
 
 namespace FunOlympicGameManagementSystem.Controllers {
     public class AccountController : Controller {
@@ -66,7 +67,7 @@ namespace FunOlympicGameManagementSystem.Controllers {
             if(ModelState.IsValid) {
                 var isEmailAlreadyExists = this.IsEmailExists(userViewModel.Email);
                 if(isEmailAlreadyExists) {
-                    ModelState.AddModelError("EmailExists",$"{userViewModel.Email} is already exist in system");
+                    ModelState.AddModelError("EmailExists",$"{userViewModel.Email} is already exist in system.");
                 return View();
                 }
                 try {
@@ -116,5 +117,42 @@ namespace FunOlympicGameManagementSystem.Controllers {
             var IsCheck = _appDbContext.Users.Where(email => email.Email == eMail).FirstOrDefault();
             return IsCheck != null;
         }
+        public ActionResult ForgetPassword()=> View();
+
+        [HttpPost]
+        public ActionResult ForgetPassword(string EmailId) {
+            var IsExists = IsEmailExists(EmailId);
+            if (!IsExists) {
+                ModelState.AddModelError("EmailNotExists", "This email is not exists.");
+                return View();
+            }
+            var user = _appDbContext.Users.Where(x => x.Email == EmailId).FirstOrDefault();
+            string otp = OtpHelper.GetRandom6Digit();
+            OtpHelper.SendOtpToUserEmail(EmailId, otp);
+            OTPEntity oTPEntity = OtpHelper.OtpCreateWithEmail(EmailId, otp);
+            _appDbContext.OTPs.Add(oTPEntity);
+            _appDbContext.SaveChanges();
+            ViewBag.Msg = "We send OTP to this email " + EmailId;
+            ViewBag.ActivateURL = "<a href=\"/account/ChangePassword\">Click here to reset your forget password.</a>.";
+            TempData["resetEmailId"] = EmailId;
+            return View();
+        }
+
+        public ActionResult ChangePassword() => View();
+        [HttpPost]
+        public ActionResult ChangePassword(ChangePasswordViewModel changePasswordViewModel) {
+            var correctOtp = _appDbContext.OTPs.Any(x => x.IsActive && x.OTP == changePasswordViewModel.OTP && x.EmailId == changePasswordViewModel.Email);
+            if (correctOtp) {
+                UserEntity u = _appDbContext.Users.Where(x => x.Email == changePasswordViewModel.Email).SingleOrDefault();
+                u.Password = EncryptPassword.TextToEncrypt(changePasswordViewModel.Password);
+                _appDbContext.Entry(u).State = EntityState.Modified;//Updating the existing recrod in db set 
+                _appDbContext.SaveChanges();//Updating  the record to the database
+                ViewBag.Msg = "Password reseting process is completed successfully.";
+                ViewBag.ActivateURL = "<a href=\"/account/login\">Click here to login again.</a>.";
+                return View();
+            }
+            return View();
+        }
+
     }
 }
