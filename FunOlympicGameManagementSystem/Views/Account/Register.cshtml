@@ -42,11 +42,12 @@
                                     </div>
                                     <div class="mb-4">
                                         <label for="txtPasswrod" class="form-label">Password</label>
-                                        <input type="password" name="Password" class="form-control" id="txtPasswrod">
+                                        <input type="password" name="Password" class="form-control" id="txtPasswrod" onkeyup='passConfirm();'>
                                     </div>
                                     <div class="mb-4">
                                         <label for="txtConfirmPasswrod" class="form-label">Confirm Password</label>
-                                        <input type="password" class="form-control" id="txtConfrimPasswrod">
+                                        <input type="password" class="form-control" id="txtConfrimPasswrod" onkeyup='passConfirm();'>
+                                        <span id="Message"></span>
                                     </div>
                                       <div class="mb-4">
                                         <label for="txtDOB" class="form-label">DOB</label>
@@ -61,7 +62,9 @@
                                         <label for="ddlCountry" class="form-label">Country</label>
                                         <select class="form-control" name="Country">
                                           <option value="Myanmar">Myanmar</option>
-                                            <option value="Japan">Japan</option>
+                                          <option value="Japan">Japan</option>
+                                            <option value="Korea">Korea</option>
+                                            <option value="Thailand">Thailand</option>
                                       </select>
                                     </div>
                                     <div class="mb-4">
@@ -85,6 +88,16 @@
     <script src="~/assets/libs/jquery/dist/jquery.min.js"></script>
     <script src="~/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript">
+        var passConfirm = function () {
+            if (document.getElementById("txtPasswrod").value ==
+                document.getElementById("txtConfrimPasswrod").value) {
+                document.getElementById("Message").style.color = "Green";
+                document.getElementById("Message").innerHTML = "Passwords match!"
+            } else {
+                document.getElementById("Message").style.color = "Red";
+                document.getElementById("Message").innerHTML = "Passwords do NOT match!"
+            }
+        }
         $(document).ready(function () {
             $('#rdoMale').click(function () {
                 $("#rdoFemale").prop("checked", false);

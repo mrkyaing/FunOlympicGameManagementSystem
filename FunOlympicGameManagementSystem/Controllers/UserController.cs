@@ -1,8 +1,10 @@
 ﻿using FunOlympicGameManagementSystem.Models.DAO;
-using Microsoft.AspNetCore.Http;
+using FunOlympicGameManagementSystem.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FunOlympicGameManagementSystem.Controllers {
+    [Authorize]
     public class UserController : Controller {
         private readonly ILogger<UserController> _logger;
         private readonly AppDbContext _appDbContext;
@@ -13,7 +15,7 @@ namespace FunOlympicGameManagementSystem.Controllers {
         }
         // GET: UserController
         public ActionResult List() {
-            var users=_appDbContext.Users;
+            var users=_appDbContext.Users.Where(x=>x.Role.Equals(Roles.User.ToString()));
             return View(users);
         }
 

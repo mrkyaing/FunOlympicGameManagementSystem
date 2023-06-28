@@ -2,8 +2,12 @@
 using FunOlympicGameManagementSystem.Models.DAO;
 using FunOlympicGameManagementSystem.Models.ViewModels;
 using FunOlympicGameManagementSystem.Utility;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FunOlympicGameManagementSystem.Controllers {
     public class AccountController : Controller {
@@ -20,7 +24,7 @@ namespace FunOlympicGameManagementSystem.Controllers {
             return View();
         }
         [HttpPost]
-        public IActionResult Login(UserViewModel userViewModel) {
+        public async Task<IActionResult> Login(UserViewModel userViewModel) {
           
             bool IsActivateEmail = _appDbContext.Users.Any(x => x.Email == userViewModel.Email && x.IsEmailVerification==false);
             if (IsActivateEmail) {
@@ -29,22 +33,30 @@ namespace FunOlympicGameManagementSystem.Controllers {
                 return View();
             }
             var _passWord = EncryptPassword.TextToEncrypt(userViewModel.Password);
-            bool Isvalid = _appDbContext.Users.Any(x => x.Email == userViewModel.Email && x.IsEmailVerification &&
-            x.Password == _passWord);
-            if (Isvalid) {
-                //int timeout = LgnUsr.Rememberme ? 60 : 5; // Timeout in minutes, 60 = 1 hour.    
-                //var ticket = new FormsAuthenticationTicket(LgnUsr.EmailId, false, timeout);
-                //string encrypted = FormsAuthentication.Encrypt(ticket);
-                //var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encrypted);
-                //cookie.Expires = System.DateTime.Now.AddMinutes(timeout);
-                //cookie.HttpOnly = true;
-                //Response.Cookies.Add(cookie);
-                return RedirectToAction("Index", "AdminHome");
+            var user = _appDbContext.Users.Where(x => x.Email == userViewModel.Email && x.IsEmailVerification &&
+            x.Password == _passWord).SingleOrDefault();
+            if (user is not null) {
+                var claims = new List<Claim>{
+                    new Claim(ClaimTypes.Name, user.Email),
+                    new Claim(ClaimTypes.Role, user.Role),
+                };
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var authProperties = new AuthenticationProperties{ExpiresUtc = DateTime.Now.AddMinutes(10)};
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity),authProperties);
+                if (user.Role.Equals(Roles.Admin.ToString()))
+                    return RedirectToAction("Index", "AdminHome");
+                else 
+                    return RedirectToAction("Index", "Home");
             }
             else {
                 ViewBag.Msg= "Invalid Information... Please try again!";
             }
             return View();
+        }
+        [Authorize]
+        public async Task< IActionResult> Logout() {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
         }
         public IActionResult Register() {
             return View();
@@ -68,6 +80,7 @@ namespace FunOlympicGameManagementSystem.Controllers {
                         Address = userViewModel.Address,
                         Country = userViewModel.Country,
                         Gender = userViewModel.Gender,
+                        Role= Roles.User.ToString(),
                     };
                     _appDbContext.Users.Add(userEntity);
                     _appDbContext.SaveChanges();
@@ -76,9 +89,8 @@ namespace FunOlympicGameManagementSystem.Controllers {
                     OTPEntity oTPEntity=OtpHelper.OtpCreateWithEmail(userViewModel.Email, otp);
                     _appDbContext.OTPs.Add(oTPEntity);
                     _appDbContext.SaveChanges();
-                    ViewBag.Msg = "Register successfully and we send OTP to this email :" + userViewModel.Email;
+                    ViewBag.Msg = "We send OTP to this email " + userViewModel.Email;
                     ViewBag.ActivateURL= "<a href=\"/account/UserVerificationWithOtp\">Click here to activate your account</a>.";
-                     
                 }
                 catch (Exception e) {
                     ViewBag.Msg = "Register failed" +e.Message;

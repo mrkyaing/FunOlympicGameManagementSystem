@@ -9,6 +9,7 @@ namespace FunOlympicGameManagementSystem.Models {
         [Required]
         public string Email { get; set; }
         [Required]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
         [Required]
         public DateTime DOB { get; set; }
@@ -16,6 +17,7 @@ namespace FunOlympicGameManagementSystem.Models {
         public string? Country { get; set; }
         public string Address { get; set; }
         public bool IsEmailVerification { get; set; }
-       
+        public string Role { get; set; }
+
     }
 }

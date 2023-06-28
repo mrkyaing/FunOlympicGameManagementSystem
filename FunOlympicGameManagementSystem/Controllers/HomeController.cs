@@ -11,6 +11,8 @@ namespace FunOlympicGameManagementSystem.Controllers {
         }
 
         public IActionResult Index() {
+            //var loggedInUser = HttpContext.User;
+            //TempData["loggedInUserName"] = loggedInUser.Identity.Name; // This is our username we set earlier in the claims. 
             return View();
         }
 
