@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using static System.Net.WebRequestMethods;
+
 
 namespace FunOlympicGameManagementSystem.Controllers {
     public class AccountController : Controller {
@@ -26,7 +26,6 @@ namespace FunOlympicGameManagementSystem.Controllers {
         }
         [HttpPost]
         public async Task<IActionResult> Login(UserViewModel userViewModel) {
-          
             bool IsActivateEmail = _appDbContext.Users.Any(x => x.Email == userViewModel.Email && x.IsEmailVerification==false);
             if (IsActivateEmail) {
                 ViewBag.Msg = "You can't login because you are not activated user.Please activate first.";
@@ -56,12 +55,16 @@ namespace FunOlympicGameManagementSystem.Controllers {
         }
         [Authorize]
         public async Task< IActionResult> Logout() {
+            var loggedInUser = HttpContext.User;
+            var userEmailId = loggedInUser.Identity.Name; // This is our username we set earlier in the claims. 
+            var otpsLoginedUser=_appDbContext.OTPs.Where(x=>x.EmailId.Equals(userEmailId));
+            _appDbContext.OTPs.RemoveRange(otpsLoginedUser);
+           await _appDbContext.SaveChangesAsync();
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
-        public IActionResult Register() {
-            return View();
-        }
+        public IActionResult Register()=> View();
+
         [HttpPost]
         public IActionResult Register(UserViewModel userViewModel) {
             if(ModelState.IsValid) {
@@ -113,8 +116,8 @@ namespace FunOlympicGameManagementSystem.Controllers {
             }
             return View();
         }
-        private bool IsEmailExists(string eMail) {
-            var IsCheck = _appDbContext.Users.Where(email => email.Email == eMail).FirstOrDefault();
+        private bool IsEmailExists(string email) {
+            var IsCheck = _appDbContext.Users.Where(x => x.Email == email).FirstOrDefault();
             return IsCheck != null;
         }
         public ActionResult ForgetPassword()=> View();
@@ -139,6 +142,7 @@ namespace FunOlympicGameManagementSystem.Controllers {
         }
 
         public ActionResult ChangePassword() => View();
+        
         [HttpPost]
         public ActionResult ChangePassword(ChangePasswordViewModel changePasswordViewModel) {
             var correctOtp = _appDbContext.OTPs.Any(x => x.IsActive && x.OTP == changePasswordViewModel.OTP && x.EmailId == changePasswordViewModel.Email);
