@@ -25,7 +25,14 @@
                         <td>@item.Gender</td>
                         <td>@item.Country</td>
                         <td>@item.DOB.ToString("dd MM yyyy")</td>
-                        <td>@item.IsEmailVerification</td>
+                        <td>
+                            @if (item.IsEmailVerification) {
+                                <span style="color:green">Activated user</span>
+                            }
+                            else {
+                                <span style="color:red">Non activated user</span>
+                            }
+                        </td>
                         <td>@item.Address</td>
                         <td>
                             <a data-toggle="modal" data-target="#DeleteModal-@item.Id" style='margin-left:5px' class="btn btn-danger" role="button">Delete</a>
