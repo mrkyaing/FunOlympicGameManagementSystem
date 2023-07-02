@@ -26,7 +26,10 @@
                             <a class="nav-link text-white" asp-area="" asp-controller="Game" asp-action="Index">Games</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy">About Us</a>
+                            <a class="nav-link text-white" asp-area="" asp-controller="Game" asp-action="LiveStream">Live Stream</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="About">About Us</a>
                         </li>
                         @if(User.Identity.IsAuthenticated) {
                             <li class="nav-item float-right">

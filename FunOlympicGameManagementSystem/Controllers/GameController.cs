@@ -5,5 +5,9 @@ namespace FunOlympicGameManagementSystem.Controllers {
         public IActionResult Index() {
             return View();
         }
+
+        public IActionResult LiveStream() {
+            return View();
+        }
     }
 }
