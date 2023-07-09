@@ -89,7 +89,7 @@ namespace FunOlympicGameManagementSystem.Controllers {
                     _appDbContext.Users.Add(userEntity);
                     _appDbContext.SaveChanges();
                     string otp = OtpHelper.GetRandom6Digit();
-                    OtpHelper.SendOtpToUserEmail(userViewModel.Email, otp);
+                    OtpHelper.SendOtpToUserEmail(userViewModel.Email, otp,"Account creation", "account creation process");
                     OTPEntity oTPEntity=OtpHelper.OtpCreateWithEmail(userViewModel.Email, otp);
                     _appDbContext.OTPs.Add(oTPEntity);
                     _appDbContext.SaveChanges();
@@ -111,7 +111,7 @@ namespace FunOlympicGameManagementSystem.Controllers {
                 u.IsEmailVerification=true;
                 _appDbContext.Entry(u).State = EntityState.Modified;//Updating the existing recrod in db set 
                 _appDbContext.SaveChanges();//Updating  the record to the database
-                ViewBag.Msg = "Account verification is completed.";
+                ViewBag.Msg = "Account verification process is completed.";
                 return View();
             }
             return View();
@@ -131,7 +131,7 @@ namespace FunOlympicGameManagementSystem.Controllers {
             }
             var user = _appDbContext.Users.Where(x => x.Email == EmailId).FirstOrDefault();
             string otp = OtpHelper.GetRandom6Digit();
-            OtpHelper.SendOtpToUserEmail(EmailId, otp);
+            OtpHelper.SendOtpToUserEmail(EmailId, otp,"Account verification", "Account verification process");
             OTPEntity oTPEntity = OtpHelper.OtpCreateWithEmail(EmailId, otp);
             _appDbContext.OTPs.Add(oTPEntity);
             _appDbContext.SaveChanges();
