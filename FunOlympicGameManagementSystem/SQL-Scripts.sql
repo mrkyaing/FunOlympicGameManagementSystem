@@ -50,3 +50,6 @@ CREATE TABLE [dbo].[OTP](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
+
+--to update role from user to admin,system admin
+update users set Role='Admin' where id='b41e519a-91d7-4dba-82df-ef2d9509675f'
