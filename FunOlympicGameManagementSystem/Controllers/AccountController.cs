@@ -43,7 +43,7 @@ namespace FunOlympicGameManagementSystem.Controllers {
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var authProperties = new AuthenticationProperties{ExpiresUtc = DateTime.Now.AddMinutes(10)};
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity),authProperties);
-                if (user.Role.Equals(Roles.Admin.ToString()))
+                if (user.Role.Equals(Roles.Admin.ToString())|| user.Role.Equals(Roles.SystemAdmin.ToString()))
                     return RedirectToAction("Index", "AdminHome");
                 else 
                     return RedirectToAction("Index", "Home");
@@ -158,5 +158,19 @@ namespace FunOlympicGameManagementSystem.Controllers {
             return View();
         }
 
+        public IActionResult ProfileUpdate(string userId)
+        {
+            UserViewModel userView=_appDbContext.Users.Where(x=>x.Email==userId).Select(s=>new UserViewModel
+            {
+                Id=s.Id,
+                UserName=s.UserName,
+                Email=s.Email,
+                Address=s.Address,
+                Country=s.Country,
+                Gender=s.Gender,
+                DOB=s.DOB
+            }).SingleOrDefault();
+            return View(userView);
+        }
     }
 }
