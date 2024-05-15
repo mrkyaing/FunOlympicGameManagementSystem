@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<CountryEntity>
+@{
     Layout = null;
 }
 <!doctype html>
@@ -57,14 +58,15 @@
                                         <label for="txtConfirmPasswrod" class="form-label">Gender</label>
                                         <input type="radio" name="Gender" class="form-check" value="Female" id="rdoFemale" checked>Female
                                         <input type="radio" name="Gender" class="form-check" value="Male" id="rdoMale">Male
+                                        <input type="radio" name="Gender" class="form-check" value="Other" id="rdoOther">Other
                                     </div>
                                     <div class="mb-4">
                                         <label for="ddlCountry" class="form-label">Country</label>
                                         <select class="form-control" name="Country">
-                                          <option value="Myanmar">Myanmar</option>
-                                          <option value="Japan">Japan</option>
-                                            <option value="Korea">Korea</option>
-                                            <option value="Thailand">Thailand</option>
+                                            @foreach (CountryEntity country in Model)
+                                            {
+                                                <option value="@country.Name">@country.Name</option>
+                                            }
                                       </select>
                                     </div>
                                     <div class="mb-4">
@@ -101,9 +103,15 @@
         $(document).ready(function () {
             $('#rdoMale').click(function () {
                 $("#rdoFemale").prop("checked", false);
+                $("#rdoOther").prop("checked", false);
             });
             $('#rdoFemale').click(function () {
                 $("#rdoMale").prop("checked", false);
+                $("#rdoOther").prop("checked", false);
+            });
+            $('#rdoOther').click(function () {
+                $("#rdoMale").prop("checked", false);
+                $("#rdoFemale").prop("checked", false);
             });
         });
     </script>

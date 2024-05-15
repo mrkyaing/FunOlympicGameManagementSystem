@@ -1,28 +1,29 @@
 ﻿@model UserViewModel
-<body>
-                <div class="row justify-content-center w-100">
+@if (!User.IsInRole("User"))
+{
+    Layout = "Admin/_AdminLayout";
+}
+@if (ViewBag.Msg != null)
+{
+    <b>@ViewBag.Msg </b>
+}
+<div class="row justify-content-center w-100">
                     <div class="col-md-8 col-lg-6 col-xxl-3">
                         <div class="card mb-0">
-                            <div class="card-body">
                                 <a href="/home/index" class="text-nowrap logo-img text-center d-block py-3 w-100">
                                     <img src="~/assets/images/logos/dark-logo.svg" width="180" alt="">
                                 </a>
-                                <p class="text-center">Please register first!!</p>
-                                @if (ViewBag.Msg != null)
-                                {
-                                    <div class="alert alert-success">
-                                        @ViewBag.Msg @Html.Raw(ViewBag.ActivateURL)
-                                    </div>
-                                }
+                                <p class="text-center">Profile Update process</p>
                                 <form action="/account/profileupdate" method="post">
                                     <input type="hidden" name="Id" value="@Model.Id"/>
+                                    <input type="hidden" name="Password" value="NOTHING" />
                                     <div class="mb-3">
                                         <label for="txtUserName" class="form-label">User Name</label>
                                         <input type="text" name="UserName" value="@Model.UserName" class="form-control" id="txtUserName" aria-describedby="textHelp" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="txtEmail" class="form-label">Email Address</label>
-                                        <input type="email" name="Email" value="@Model.Email" class="form-control" id="txtEmail" aria-describedby="emailHelp" required>
+                                        <input type="email" name="Email" value="@Model.Email" class="form-control" id="txtEmail" aria-describedby="emailHelp" required readonly>
                                         @Html.ValidationMessage("EmailExists", new { @class = "text-danger" })
                                     </div>                               
                                     <div class="mb-4">
@@ -33,14 +34,22 @@
                                         <label for="txtConfirmPasswrod" class="form-label">Gender</label>
                                         <input type="radio" name="Gender" class="form-check" value="Female" id="rdoFemale" @(Model.Gender == "Female" ? "Checked" : "")>Female
                                         <input type="radio" name="Gender" class="form-check" value="Male" id="rdoMale" @(Model.Gender == "Male" ? "Checked" : "")>Male
+                                        <input type="radio" name="Gender" class="form-check" value="Other" id="rdoMale" @(Model.Gender == "Other" ? "Checked" : "")>Other
                                     </div>
                                     <div class="mb-4">
                                         <label for="ddlCountry" class="form-label">Country</label>
                                         <select class="form-control" name="Country">
-                                            <option value="Myanmar">Myanmar</option>
-                                            <option value="Japan">Japan</option>
-                                            <option value="Korea">Korea</option>
-                                            <option value="Thailand">Thailand</option>
+                                @foreach (CountryEntity country in @ViewBag.Countries)
+                                {
+                                    if (@country.Name == @Model.Country)
+                                    {
+                                        <option value="@country.Name" selected>@country.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@country.Name">@country.Name</option>
+                                    }
+                                }
                                         </select>
                                     </div>
                                     <div class="mb-4">
@@ -48,8 +57,8 @@
                                         <textarea name="Address" cols="10" rows="5" class="form-control">@Model.Address</textarea>
                                     </div>
                                     <input type="submit" value="Update" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" />
+                                    <input type="reset" value="Cancel" class="btn btn-secondary w-100 py-8 fs-4 mb-4 rounded-2" />   
                                 </form>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -59,11 +68,15 @@
         $(document).ready(function () {
             $('#rdoMale').click(function () {
                 $("#rdoFemale").prop("checked", false);
+                $("#rdoOther").prop("checked", false);
             });
             $('#rdoFemale').click(function () {
                 $("#rdoMale").prop("checked", false);
+                $("#rdoOther").prop("checked", false);
+            });
+            $('#rdoOther').click(function () {
+                $("#rdoMale").prop("checked", false);
+                $("#rdoFemale").prop("checked", false);
             });
         });
     </script>
-</body>
-</html>

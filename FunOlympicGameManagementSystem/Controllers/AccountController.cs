@@ -63,7 +63,10 @@ namespace FunOlympicGameManagementSystem.Controllers {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
-        public IActionResult Register()=> View();
+        public IActionResult Register()
+        {
+            return View(CountryEntity.GetAllCities());
+        }
 
         [HttpPost]
         public IActionResult Register(UserViewModel userViewModel) {
@@ -160,6 +163,7 @@ namespace FunOlympicGameManagementSystem.Controllers {
 
         public IActionResult ProfileUpdate(string userId)
         {
+            ViewBag.Countries = CountryEntity.GetAllCities();
             UserViewModel userView=_appDbContext.Users.Where(x=>x.Email==userId).Select(s=>new UserViewModel
             {
                 Id=s.Id,
@@ -171,6 +175,34 @@ namespace FunOlympicGameManagementSystem.Controllers {
                 DOB=s.DOB
             }).SingleOrDefault();
             return View(userView);
+        }
+        [HttpPost]
+        public IActionResult ProfileUpdate(UserViewModel userViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    UserEntity userEntity = _appDbContext.Users.Where(x=>x.Id==userViewModel.Id).SingleOrDefault();
+                    if(userEntity!=null)
+                    {
+                        userEntity.UserName = userViewModel.UserName;
+                        userEntity.DOB = userViewModel.DOB;
+                        userEntity.Address = userViewModel.Address;
+                        userEntity.Country = userViewModel.Country;
+                        userEntity.Gender = userViewModel.Gender;
+                        _appDbContext.Update(userEntity);
+                        _appDbContext.SaveChanges();
+                        ViewBag.Msg = "Update successfully." + userViewModel.Email;
+                    }
+                }
+                catch (Exception e)
+                {
+                    ViewBag.Msg = "Failed update process" + e.Message;
+                }
+            }
+            ViewBag.Countries = CountryEntity.GetAllCities();
+            return View(userViewModel);
         }
     }
 }
