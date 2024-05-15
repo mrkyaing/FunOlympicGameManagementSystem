@@ -1,4 +1,5 @@
-﻿using FunOlympicGameManagementSystem.Models.DAO;
+﻿using FunOlympicGameManagementSystem.Models;
+using FunOlympicGameManagementSystem.Models.DAO;
 using FunOlympicGameManagementSystem.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,7 @@ namespace FunOlympicGameManagementSystem.Controllers {
         }
         // GET: UserController
         public ActionResult List() {
-            var users=_appDbContext.Users.Where(x=>x.Role.Equals(Roles.User.ToString()));
+            var users=_appDbContext.Users.Where(x=>x.Role.Equals(Roles.User.ToString())&&x.IsActive);
             return View(users);
         }
 
@@ -59,8 +60,20 @@ namespace FunOlympicGameManagementSystem.Controllers {
         }
 
         // GET: UserController/Delete/5
-        public ActionResult Delete(int id) {
-            return View();
+        public ActionResult Delete(string id) {
+            try
+            {
+                UserEntity user = _appDbContext.Users.Where(x => x.Id == id).SingleOrDefault();
+                user.IsActive = false;
+                _appDbContext.Update(user);
+                _appDbContext.SaveChanges();
+                TempData["Info"] = "Delete successfully";
+            }
+            catch (Exception)
+            {
+                TempData["Info"] = "Error when delete the recrod.";
+            }
+            return RedirectToAction("list");
         }
 
         // POST: UserController/Delete/5

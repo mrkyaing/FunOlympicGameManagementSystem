@@ -103,7 +103,7 @@ namespace FunOlympicGameManagementSystem.Controllers {
                     ViewBag.Msg = "Register failed" +e.Message;
                 }
             }
-            return View();
+            return View(CountryEntity.GetAllCities());
         }
         public IActionResult UserVerificationWithOtp()=>View();
         [HttpPost]
@@ -120,7 +120,7 @@ namespace FunOlympicGameManagementSystem.Controllers {
             return View();
         }
         private bool IsEmailExists(string email) {
-            var IsCheck = _appDbContext.Users.Where(x => x.Email == email).FirstOrDefault();
+            var IsCheck = _appDbContext.Users.Where(x => x.Email == email&&x.IsActive).FirstOrDefault();
             return IsCheck != null;
         }
         public ActionResult ForgetPassword()=> View();
@@ -203,6 +203,16 @@ namespace FunOlympicGameManagementSystem.Controllers {
             }
             ViewBag.Countries = CountryEntity.GetAllCities();
             return View(userViewModel);
+        }
+        public IActionResult UpdatePassword(string userId)
+        {
+            UserViewModel userView = _appDbContext.Users.Where(x => x.Email == userId).Select(s => new UserViewModel
+            {
+                Id = s.Id,
+                UserName = s.UserName,
+                Email = s.Email
+            }).SingleOrDefault();
+            return View(userView);
         }
     }
 }

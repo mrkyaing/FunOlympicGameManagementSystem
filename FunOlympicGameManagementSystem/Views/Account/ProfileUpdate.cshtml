@@ -7,12 +7,7 @@
 {
     <b>@ViewBag.Msg </b>
 }
-<div class="row justify-content-center w-100">
-                    <div class="col-md-8 col-lg-6 col-xxl-3">
-                        <div class="card mb-0">
-                                <a href="/home/index" class="text-nowrap logo-img text-center d-block py-3 w-100">
-                                    <img src="~/assets/images/logos/dark-logo.svg" width="180" alt="">
-                                </a>
+        <div class="wrapper">
                                 <p class="text-center">Profile Update process</p>
                                 <form action="/account/profileupdate" method="post">
                                     <input type="hidden" name="Id" value="@Model.Id"/>
@@ -60,10 +55,6 @@
                                     <input type="reset" value="Cancel" class="btn btn-secondary w-100 py-8 fs-4 mb-4 rounded-2" />   
                                 </form>
                         </div>
-                    </div>
-                </div>
-    <script src="~/assets/libs/jquery/dist/jquery.min.js"></script>
-    <script src="~/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $('#rdoMale').click(function () {
