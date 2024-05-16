@@ -110,7 +110,7 @@ namespace FunOlympicGameManagementSystem.Controllers {
         public IActionResult UserVerificationWithOtp(string email,string otp) {
             var correctOtp=_appDbContext.OTPs.Any(x=>x.IsActive && x.OTP == otp && x.EmailId==email);
             if (correctOtp) {
-                UserEntity u = _appDbContext.Users.Where(x => x.Email == email).SingleOrDefault();
+                UserEntity u = _appDbContext.Users.Where(x => x.Email == email && x.IsActive).SingleOrDefault();
                 u.IsEmailVerification=true;
                 _appDbContext.Entry(u).State = EntityState.Modified;//Updating the existing recrod in db set 
                 _appDbContext.SaveChanges();//Updating  the record to the database
@@ -164,7 +164,7 @@ namespace FunOlympicGameManagementSystem.Controllers {
         public IActionResult ProfileUpdate(string userId)
         {
             ViewBag.Countries = CountryEntity.GetAllCities();
-            UserViewModel userView=_appDbContext.Users.Where(x=>x.Email==userId).Select(s=>new UserViewModel
+            UserViewModel userView=_appDbContext.Users.Where(x=>x.Email==userId && x.IsActive).Select(s=>new UserViewModel
             {
                 Id=s.Id,
                 UserName=s.UserName,
@@ -206,7 +206,7 @@ namespace FunOlympicGameManagementSystem.Controllers {
         }
         public IActionResult UpdatePassword(string userId)
         {
-            UserViewModel userView = _appDbContext.Users.Where(x => x.Email == userId).Select(s => new UserViewModel
+            UserViewModel userView = _appDbContext.Users.Where(x => x.Email == userId && x.IsActive).Select(s => new UserViewModel
             {
                 Id = s.Id,
                 UserName = s.UserName,

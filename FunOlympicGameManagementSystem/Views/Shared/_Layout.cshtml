@@ -32,8 +32,14 @@
                             <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="About">About Us</a>
                         </li>
                         @if(User.Identity.IsAuthenticated) {
-                            <li class="nav-item float-right">
-                                <a class="nav-link text-white align-content-end" href="/Account/profileupdate?userId=@User.Identity.Name">Hello,@User.Identity.Name!</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link text-white dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Hello,@User.Identity.Name!
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/Account/profileupdate?userId=@User.Identity.Name">profile update</a></li>
+                                    <li><a class="dropdown-item" href="/account/updatePassword?userId=@User.Identity.Name">change password</a></li>
+                                </ul>
                             </li>
                             <li class="nav-item float-right">
                                 <a onclick="return confirm('Are you sure to logout.?')" class="nav-link text-white align-content-end" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
