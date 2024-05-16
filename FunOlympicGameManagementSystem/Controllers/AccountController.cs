@@ -214,5 +214,29 @@ namespace FunOlympicGameManagementSystem.Controllers {
             }).SingleOrDefault();
             return View(userView);
         }
+        [HttpPost]
+        public IActionResult UpdatePassword(UpdatePasswordViewModel updatePasswordViewModel)
+        {
+            UserEntity user = _appDbContext.Users.Where(x => x.Email == updatePasswordViewModel.Email && x.Id == updatePasswordViewModel.Id).SingleOrDefault();
+            try
+            {             
+                if (user.Password.Equals(EncryptPassword.TextToEncrypt(updatePasswordViewModel.CurrentPassword)))
+                {
+                    user.Password = EncryptPassword.TextToEncrypt(updatePasswordViewModel.NewPassword);
+                    _appDbContext.Update(user);
+                    _appDbContext.SaveChanges();
+                    ViewBag.Msg = "Update new password for your account.";
+                }
+                else
+                {
+                    ViewBag.Msg = "Wrong current password.";
+                }
+            }
+            catch (Exception e)
+            {
+                ViewBag.Msg = "Failed update process" + e.Message; 
+            }
+            return View(new UserViewModel { Id=user.Id,Email=user.Email,UserName=user.UserName});
+        }
     }
 }
