@@ -1,7 +1,10 @@
 # FunOlympic Game Managment System
 ## Project Overview
 - FunOlympic Games 2024 will be held in The City of Payris. The FunOlympic committee have decided that they require a few additional projects to ensure that the games would be well organised, staffed, attended, and accessible to everyone on an online broadcast platform. So, the committee need an online registration system that everyone can use to access the game and to provide user with the broadcasting streaming of the entire game.
-
+## Task
+- To build an online registration system for audiences to gain access the broadcast platform.
+## Product to be delivered
+- Web-based or Mobile-based Application named FunOlympic Games 2024 City of Payris.
 # Functional Requirements
 ## Public User
 - can see and get FunOlympic Games 2024 will be held in The City of Payris.
