@@ -150,7 +150,7 @@ namespace FunOlympicGameManagementSystem.Controllers {
         public ActionResult ChangePassword(ChangePasswordViewModel changePasswordViewModel) {
             var correctOtp = _appDbContext.OTPs.Any(x => x.IsActive && x.OTP == changePasswordViewModel.OTP && x.EmailId == changePasswordViewModel.Email);
             if (correctOtp) {
-                UserEntity u = _appDbContext.Users.Where(x => x.Email == changePasswordViewModel.Email).SingleOrDefault();
+                UserEntity u = _appDbContext.Users.Where(x => x.Email == changePasswordViewModel.Email &&x.IsActive).SingleOrDefault();
                 u.Password = EncryptPassword.TextToEncrypt(changePasswordViewModel.Password);
                 _appDbContext.Entry(u).State = EntityState.Modified;//Updating the existing recrod in db set 
                 _appDbContext.SaveChanges();//Updating  the record to the database
