@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Contact Enquiry";
+}
+<div>
+    @if (ViewBag.Msg != null)
+    {
+        <b class="center">@ViewBag.Msg </b>
+    }
+    <form action="/home/contactenquiry" method="post">
+        <div class="mb-3">
+            <label for="txtUserName" class="form-label">User Name</label>
+            <input type="text" name="Name" class="form-control" id="txtUserName" aria-describedby="textHelp" required>
+        </div>
+        <div class="mb-4">
+            <label for="txtEmail" class="form-label">Email</label>
+            <input type="email" name="Email" class="form-control" required>
+        </div>    
+        <div class="mb-4">
+            <label for="txtPhone" class="form-label">Phone</label>
+            <input type="tel" class="form-control"  name="Phone">
+        </div>
+        <div class="mb-4">
+            <label for="txtMessage" class="form-label">Message</label>
+            <textarea name="Message" cols="10" rows="5" class="form-control"></textarea>
+        </div>
+        <input type="submit" value="Send" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2" />
+    </form>
+</div>

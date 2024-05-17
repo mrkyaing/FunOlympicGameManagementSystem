@@ -51,5 +51,56 @@ CREATE TABLE [dbo].[OTP](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+USE [FOGMS]
+GO
+
+/****** Object:  Table [dbo].[ContactEnquiry]    Script Date: 2024-05-18 00:00:04 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[ContactEnquiry](
+	[Id] [nvarchar](450) NOT NULL,
+	[Name] [nvarchar](max) NOT NULL,
+	[Email] [nvarchar](max) NOT NULL,
+	[Phone] [nvarchar](max) NULL,
+	[Message] [nvarchar](max) NOT NULL,
+	[CreatedOn] [datetime2](7) NOT NULL,
+	[IsActive] [bit] NOT NULL,
+ CONSTRAINT [PK_ContactEnquiry] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+
+USE [FOGMS]
+GO
+
+/****** Object:  Table [dbo].[WishListGame]    Script Date: 2024-05-18 00:00:40 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[WishListGame](
+	[Id] [nvarchar](450) NOT NULL,
+	[UserId] [nvarchar](max) NOT NULL,
+	[Name] [nvarchar](max) NOT NULL,
+	[Description] [nvarchar](max) NOT NULL,
+	[CreatedOn] [datetime2](7) NOT NULL,
+	[IsActive] [bit] NOT NULL,
+ CONSTRAINT [PK_WishListGame] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+
 --to update role from user to admin,system admin
 update users set Role='Admin' where id='b41e519a-91d7-4dba-82df-ef2d9509675f'
