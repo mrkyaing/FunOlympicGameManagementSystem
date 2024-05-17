@@ -44,3 +44,28 @@
 - User can send enquires to the administrator using text message
 - The system should be protected against common web vulnerabilities (e.g., SQL injection, cross-site scripting).
 - Develop a mobile application for iOS and Android platforms to enhance user accessibility. (future)
+# Non-functional Requirements
+## User Notifications:
+- Implement email verification during registration that registration is successful.
+## Security:
+- User passwords should be securely stored using encryption.
+## Usability:
+- The user interface should be user-friendly and easy to navigate
+-Create an interesting user interface with readable words can be browsed easily to different web pages by the use of navigation links using various navigation link,buttons that directs the user to a different page of the application
+## Performance:
+- The system should handle concurrent user registrations and logins efficiently.
+- Database queries should be optimized for quick retrieval of user information and broadcast details.
+- Short Loading Time
+## Scalability:
+- The system should be designed to handle a growing number of users and broadcasts.
+- Design the system to handle a scalable number of users and broadcasts.
+- It should be scalable to accommodate potential future enhancements.
+- Optimize database queries and system components for performance
+## Compatibility:
+- The system should be compatible with common web browsers and devices.
+- Responsiveness should be ensured for various screen sizes.
+- Be able to support various screen resolutions
+- Dynamically adjust the layout of a site according to the size of the screen on which it is displayed
+- Reachable from multiple browsers and load properly on all major browsers – including older versions(Internet Explorer and Chrome to Firefox and Safari)
+## Testing:
+- Conduct thorough testing, including unit testing, integration testing, and user acceptance testing.
