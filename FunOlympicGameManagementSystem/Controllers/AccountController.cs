@@ -123,7 +123,7 @@ namespace FunOlympicGameManagementSystem.Controllers {
             var IsCheck = _appDbContext.Users.Where(x => x.Email == email&&x.IsActive).FirstOrDefault();
             return IsCheck != null;
         }
-        public ActionResult ForgetPassword()=> View();
+        public ActionResult ForgetPassword() => View();
 
         [HttpPost]
         public ActionResult ForgetPassword(string EmailId) {
@@ -141,10 +141,11 @@ namespace FunOlympicGameManagementSystem.Controllers {
             ViewBag.Msg = "We send OTP to this email " + EmailId;
             ViewBag.ActivateURL = "<a href=\"/account/ChangePassword\">Click here to reset your forget password.</a>.";
             TempData["resetEmailId"] = EmailId;
+            ViewBag.EmailId = EmailId;
             return View();
         }
 
-        public ActionResult ChangePassword() => View();
+        public ActionResult ChangePassword() => View(new ChangePasswordViewModel());
         
         [HttpPost]
         public ActionResult ChangePassword(ChangePasswordViewModel changePasswordViewModel) {
@@ -156,9 +157,12 @@ namespace FunOlympicGameManagementSystem.Controllers {
                 _appDbContext.SaveChanges();//Updating  the record to the database
                 ViewBag.Msg = "Password reseting process is completed successfully.";
                 ViewBag.ActivateURL = "<a href=\"/account/login\">Click here to login again.</a>.";
-                return View();
+                return View(changePasswordViewModel);
+            }else
+            {
+                ViewBag.Msg = "Invalid OTP code.";
             }
-            return View();
+            return View(changePasswordViewModel);
         }
 
         public IActionResult ProfileUpdate(string userId)
