@@ -1,0 +1,27 @@
+@model IEnumerable<SportTypeEntity>
+@{
+    Layout = "Admin/_AdminLayout";
+}
+<div class="wrapper">
+        @if (@TempData["Info"] != null)
+        {
+            <b>@TempData["Info"]</b>
+        }
+        <h1>Sport Type Information</h1>
+        <table id="UserTable" class="table table-striped table-bordered dt-responsive nowrap" width="100%">
+            <thead>
+                <tr>
+                  <th scope="col">Code</th>
+                  <th scope="col">Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model) {
+                    <tr scope="row">
+                    <td>@item.Code</td>
+                        <td>@item.Name</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+</div>
