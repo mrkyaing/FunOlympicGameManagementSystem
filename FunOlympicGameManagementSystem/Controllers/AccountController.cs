@@ -26,7 +26,7 @@ namespace FunOlympicGameManagementSystem.Controllers {
         }
         [HttpPost]
         public async Task<IActionResult> Login(UserViewModel userViewModel) {
-            bool IsActivateEmail = _appDbContext.Users.Any(x => x.Email == userViewModel.Email && x.IsEmailVerification==false);
+            bool IsActivateEmail = _appDbContext.Users.Any(x => x.Email == userViewModel.Email && x.IsEmailVerification==false && x.IsActive);
             if (IsActivateEmail) {
                 ViewBag.Msg = "You can't login because you are not activated user.Please activate first.";
                 ViewBag.ActivateURL = "<a href=\"/account/UserVerificationWithOtp\">Click here to activate your account</a>.";
